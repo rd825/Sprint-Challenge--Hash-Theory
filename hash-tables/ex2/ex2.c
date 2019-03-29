@@ -9,19 +9,37 @@ char **reconstruct_trip(Ticket **tickets, int length)
   HashTable *ht = create_hash_table(16);
   char **route = malloc(length * sizeof(char *));
 
-  // YOUR CODE HERE
+  // loop over list of tickets to create hash table
+  for (int i = 0; i < length; i++)
+  {
+    // insert into hash table where:
+    // key = source
+    // value = destination
+    hash_table_insert(ht, tickets[i]->source, tickets[i]->destination);
+  }
 
+  // fill in the first slot in route with the route origin (destination with NONE source)
+  route[0] = hash_table_retrieve(ht, "NONE");
+
+  // loop over list of tickets to determine route
+  for (int i = 1; i < length; i++)
+  {
+    // per hint: when constructing the entire route, the ith location in the route can be found by checking the hash table for the i-1th location.
+    route[i] = hash_table_retrieve(ht, route[i - 1]);
+  }
+
+  destroy_hash_table(ht); // if you malloc, you must free
+  print_route(route, length);
   return route;
 }
 
 void print_route(char **route, int length)
 {
-  for (int i = 0; i < length; i++) {
+  for (int i = 0; i < length; i++)
+  {
     printf("%s\n", route[i]);
   }
 }
-
-
 
 #ifndef TESTING
 int main(void)
