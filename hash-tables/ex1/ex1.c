@@ -28,6 +28,7 @@ Answer *get_indices_of_item_weights(int *weights, int length, int limit)
       answer->index_2 = index;
 
       // answer found
+      destroy_hash_table(ht); // if you malloc, you must free
       return answer;
     }
 
@@ -37,6 +38,7 @@ Answer *get_indices_of_item_weights(int *weights, int length, int limit)
     hash_table_insert(ht, limit - weights[i], i);
   }
 
+  destroy_hash_table(ht); // if you malloc, you must free
   // if we complete loop without finding answer, return NULL
   return NULL;
 }
